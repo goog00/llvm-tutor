@@ -69,6 +69,7 @@ Constant *CreateGlobalCounter(Module &M, StringRef GlobalVarName) {
   // This will change the declaration into definition (and initialise to 0)
   GlobalVariable *NewGV = M.getNamedGlobal(GlobalVarName);
   NewGV->setLinkage(GlobalValue::CommonLinkage);
+  //设置对齐
   NewGV->setAlignment(MaybeAlign(4));
   NewGV->setInitializer(llvm::ConstantInt::get(CTX, APInt(32, 0)));
 

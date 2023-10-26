@@ -69,6 +69,7 @@ bool MBAAdd::runOnBasicBlock(BasicBlock &BB) {
   // iterators, hence a for-range loop wouldn't be suitable
   for (auto Inst = BB.begin(), IE = BB.end(); Inst != IE; ++Inst) {
     // Skip non-binary (e.g. unary or compare) instructions
+    // 使用dyn_cast来检查当前指令是否是一个二进制操作。如果不是，那么就跳过当前循环，开始下一次循环
     auto *BinOp = dyn_cast<BinaryOperator>(Inst);
     if (!BinOp)
       continue;
@@ -92,6 +93,7 @@ bool MBAAdd::runOnBasicBlock(BasicBlock &BB) {
     IRBuilder<> Builder(BinOp);
 
     // Constants used in building the instruction for substitution
+    // 构建替换指令时使用的常量
     auto Val39 = ConstantInt::get(BinOp->getType(), 39);
     auto Val151 = ConstantInt::get(BinOp->getType(), 151);
     auto Val23 = ConstantInt::get(BinOp->getType(), 23);
@@ -133,6 +135,8 @@ bool MBAAdd::runOnBasicBlock(BasicBlock &BB) {
 
     // Replace `(a + b)` (original instructions) with `(((a ^ b) + 2 * (a & b))
     // * 39 + 23) * 151 + 111` (the new instruction)
+    // Transform/Utils/BasicBlockUtils.h
+    // https://llvm.org/doxygen/BasicBlockUtils_8h_source.html
     ReplaceInstWithInst(&BB, Inst, NewInst);
     Changed = true;
 

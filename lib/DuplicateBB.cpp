@@ -133,6 +133,9 @@ DuplicateBB::findBBsToDuplicate(Function &F, const RIV::Result &RIVResult) {
 
     // Get a random context value from the RIV set
     auto Iter = ReachableValues.begin();
+//    这段代码是C++中关于随机数生成器的代码。std::uniform_int_distribution<>是C++标准库中的一个类，它用于生成均匀分布的整数。
+//    这段代码中的Dist(0, ReachableValuesCount - 1);创建了一个分布，其范围是从0到ReachableValuesCount - 1。调用这个分布可以返回这个范围内的随机整数。
+//    这个分布生成的随机数具有均匀的概率分布，也就是说，任何值在给定范围内都有相同的可能性被生成
     std::uniform_int_distribution<> Dist(0, ReachableValuesCount - 1);
     std::advance(Iter, Dist(RNG));
 

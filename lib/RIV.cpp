@@ -32,6 +32,16 @@
 //
 // License: MIT
 //=============================================================================
+
+//LLVM pass 是指在LLVM编译器中执行的一种算法或处理步骤。它们通常用于在编译过程中执行各种分析和转换。
+//在你提到的RIV（Reachable Integer Values）pass中，它对输入函数中的每个基本块（basic block）进行计算，得出可达整数值（reachable integer values）的集合。
+//换句话说，它找出在每个基本块中可以使用的整数值。这个pass在LLVM的中间表示（Intermediate Representation，IR）层面上运作，所以它会考虑到所有具有整数类型的值，包括布尔值。
+//在LLVM的IR中，布尔值被表示为1位宽的整数（即i1）。
+//这个pass展示了如何在LLVM中从其他分析pass获取结果。它依赖于Dominator Tree分析pass来获取基本块的支配树（dominance tree）。
+//支配树是一种数据结构，用于表示程序中基本块的执行顺序。它对于一些优化和代码分析任务非常重要。
+//总的来说，RIV pass的作用是分析给定函数中的每个基本块，并确定哪些整数值可以在该基本块中使用。这对于理解和改进代码可能很有用，例如在寻找潜在的溢出错误或优化计算等方面。
+
+
 #include "RIV.h"
 
 #include "llvm/Passes/PassBuilder.h"
@@ -41,6 +51,8 @@
 #include <deque>
 
 using namespace llvm;
+
+//类型别名：使用using关键字可以为类型定义一个别名
 
 // DominatorTree node types used in RIV. One could use auto instead, but IMO
 // being verbose makes it easier to follow.
@@ -57,6 +69,7 @@ static void printRIVResult(llvm::raw_ostream &OutS, const RIV::Result &RIVMap);
 RIV::Result RIV::buildRIV(Function &F, NodeTy CFGRoot) {
   Result ResultMap;
 
+  //双端队列
   // Initialise a double-ended queue that will be used to traverse all BBs in F
   std::deque<NodeTy> BBsToProcess;
   BBsToProcess.push_back(CFGRoot);
