@@ -13,6 +13,7 @@ set(LLVM_TUTOR_PLUGINS
     OpcodeCounter
     MergeBB
     HelloWorldNew
+    DeadCodeElimination
     )
 
 set(StaticCallCounter_SOURCES
@@ -41,6 +42,8 @@ set(MergeBB_SOURCES
   MergeBB.cpp)
 set(HelloWorldNew_SOURCES
         HelloWorldNew.cpp)
+set(DeadCodeElimination_SOURCES
+        DeadCodeElimination.cpp)
 
 # CONFIGURE THE PLUGIN LIBRARIES
 # ==============================
